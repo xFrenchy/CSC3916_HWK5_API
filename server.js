@@ -201,6 +201,23 @@ router.route('/movies/:reviews?')
                 .match({movie_ID: {$gte: 1}})
                 .lookup({from: 'reviews', localField: 'movie_ID', foreignField: 'movie_ID', as: 'reviews'})
                 .exec(function (err, movie) {
+                    //I now have to order by ratings of the movies, need to calculate average of each movie
+                    let ratingAverage = [];
+                    let denom = 0;
+                    let num = 0;
+                    movie.forEach(movie =>{
+                        denom = movie.reviews.length;
+                        for(let i = 0; i < denom; ++i){
+                            num += movie.reviews[i].rating
+                        }
+                        movie.average_rating = num/denom;
+                        ratingAverage.push(num/denom);
+                        //reset values for next movie
+                        denom = 0;
+                        num = 0;
+                    });
+                    //time to sort
+                    movie.sort((a,b) => (a.average_rating < b.average_rating) ? 1 : -1);
                     res.send(movie);
                 })
         }

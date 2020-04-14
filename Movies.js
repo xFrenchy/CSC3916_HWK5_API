@@ -18,7 +18,8 @@ var MovieSchema = new Schema({
     actor_name: {type: Array, required: true},
     character_name: {type: Array, required: true},
     movie_ID: {type: Number, required: true},
-    movie_URL: {type: String, required: true}
+    movie_URL: {type: String, required: true},
+    average_rating: {type: Number, required: false}
 });
 
 // using the built-in save function and simply displaying a message
